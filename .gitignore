@@ -5,3 +5,4 @@
 .vscode/Intellectual_manifest.code-workspace
 .vscode/tasks.json
 *.exe
+*.dll
