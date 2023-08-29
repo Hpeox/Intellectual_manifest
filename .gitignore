@@ -1,2 +1,6 @@
 
 *.pth
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/Intellectual_manifest.code-workspace
+.vscode/tasks.json
