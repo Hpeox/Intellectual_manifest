@@ -22,7 +22,7 @@ int main()
     // }
 
     cv::resize(image, image, cv::Size(image.cols / 4, image.rows / 4));
-    cv::GaussianBlur(image,image,cv::Size(9,9),2,2);
+    cv::GaussianBlur(image, image, cv::Size(9, 9), 2, 2);
     cv::cvtColor(image, gray, cv::COLOR_RGB2GRAY);
     cv::threshold(gray, gray, 100, 255, cv::THRESH_BINARY);
     vector<cv::Vec3f> circles;
@@ -41,19 +41,17 @@ int main()
 
     vector<cv::Vec4i> hierarchy;
     vector<vector<cv::Point>> contours0;
-    cv::findContours(gray,contours0,cv::RETR_CCOMP,cv::CHAIN_APPROX_NONE);
-    cv:: Mat contours=cv::Mat::zeros(gray.size(),CV_8UC1);
-    for (size_t i=0;i<contours0.size();i++)
+    cv::findContours(gray, contours0, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
+    cv::Mat contours = cv::Mat::zeros(gray.size(), CV_8UC1);
+    for (size_t i = 0; i < contours0.size(); i++)
     {
-        for (size_t j=0;j<contours0[i].size();j++)
+        for (size_t j = 0; j < contours0[i].size(); j++)
         {
-            contours.at<uchar>(cv::Point(contours0[i][j].x,contours0[i][j].y))=255;
+            contours.at<uchar>(cv::Point(contours0[i][j].x, contours0[i][j].y)) = 255;
         }
     }
-    cv::namedWindow("contours",1);
-    cv::imshow("contours",contours);
-    
-    
+    cv::namedWindow("contours", 1);
+    cv::imshow("contours", contours);
 
     cv::namedWindow("origin", 0);
     cv::namedWindow("threshold", 0);
