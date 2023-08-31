@@ -20,7 +20,7 @@ int calc_distance(int x,int y,int center_x,int center_y)
 int main()
 {
     cv::Mat image, gray, image_2;
-    image = cv::imread(IMAGE_3);
+    image = cv::imread(IMAGE_2);
     if (image.empty())
     {
         cout << "aaa" << endl;
@@ -75,7 +75,7 @@ int main()
     vector<vector<cv::Point>> contours0;
     cv::findContours(gray, contours0, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
     cv::Mat contours = cv::Mat::zeros(gray.size(), CV_8UC1);
-    cv::drawContours(contours, contours0, -1, 80);
+    cv::drawContours(contours, contours0, -1, 255,1);
 
     /**
      * @brief find max/min distance
@@ -94,11 +94,26 @@ int main()
             }
         }
     }
-    // // test--
-    // cout<<sqrt(dis_max)<<endl<<sqrt(dis_min);
-    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_max),255);
-    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_min),255);
-    // // --test
+    // test--
+    cout<<sqrt(dis_max)<<endl<<sqrt(dis_min)<<endl;
+    cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_max),255);
+    cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_min),255);
+    // --test
+    {
+        int dis_tmp=(sqrt(dis_max)+sqrt(dis_min))/2;
+        cv::Mat mask=cv::Mat::zeros(gray.size(), CV_8UC1);
+        cv::circle(mask,cv::Point(CENTER_BIAS,CENTER_BIAS),dis_tmp,255,2);
+        cv::bitwise_and(mask,contours,mask);
+        cv::dilate(mask,mask,cv::Mat());
+        vector<cv::Vec4i> hierarchy1;
+        vector<vector<cv::Point>> contours1;
+        cv::findContours(mask, contours1, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+        cout<<contours1.size()/2<<endl;
+
+        cv::namedWindow("mask", 0);
+        cv::imshow("mask", mask);
+    }
+    
     cv::namedWindow("contours", 1);
     cv::imshow("contours", contours);
 
