@@ -16,6 +16,7 @@ int calc_distance(int x,int y,int center_x,int center_y)
 {
     return pow(x-center_x,2)+pow(y-center_y,2);
 }
+
 int main()
 {
     cv::Mat image, gray, image_2;
@@ -93,11 +94,11 @@ int main()
             }
         }
     }
-    // // test--
-    // cout<<sqrt(dis_max)<<endl<<sqrt(dis_min);
-    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_max),255);
-    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_min),255);
-    // // --test
+    // test--
+    cout<<sqrt(dis_max)<<endl<<sqrt(dis_min);
+    cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_max),255);
+    cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_min),255);
+    // --test
     cv::namedWindow("contours", 1);
     cv::imshow("contours", contours);
 
