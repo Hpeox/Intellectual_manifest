@@ -3,12 +3,23 @@
 
 using namespace std;
 
-#define CENTER_COND 450
+#define max(a,b) a>b?a:b
+#define min(a,b) a>b?b:a
 
+
+#define CENTER_BIAS 450
+#define IMAGE_1 "D:/hpx/intellectual_manifest/CNN/Intellectual_manifest/OpenCV/data/2020/0/1.bmp"
+#define IMAGE_2 "D:/hpx/intellectual_manifest/CNN/Intellectual_manifest/OpenCV/data/2020/0/2.bmp"
+#define IMAGE_3 "D:/hpx/intellectual_manifest/CNN/Intellectual_manifest/OpenCV/data/2020/1/1.bmp"
+
+int calc_distance(int x,int y,int center_x,int center_y)
+{
+    return pow(x-center_x,2)+pow(y-center_y,2);
+}
 int main()
 {
     cv::Mat image, gray, image_2;
-    image = cv::imread("D:/hpx/intellectual_manifest/CNN/Intellectual_manifest/OpenCV/data/2020/0/2.bmp");
+    image = cv::imread(IMAGE_1);
     if (image.empty())
     {
         cout << "aaa" << endl;
@@ -53,22 +64,42 @@ int main()
         center_x = cvRound(circles[index][0]);
         center_y = cvRound(circles[index][1]);
     }
-    image = image(cv::Range(center_y - CENTER_COND, center_y + CENTER_COND), cv::Range(center_x - CENTER_COND, center_x + CENTER_COND));
-    gray = gray(cv::Range(center_y - CENTER_COND, center_y + CENTER_COND), cv::Range(center_x - CENTER_COND, center_x + CENTER_COND));
+    image = image(cv::Range(center_y - CENTER_BIAS, center_y + CENTER_BIAS), cv::Range(center_x - CENTER_BIAS, center_x + CENTER_BIAS));
+    gray = gray(cv::Range(center_y - CENTER_BIAS, center_y + CENTER_BIAS), cv::Range(center_x - CENTER_BIAS, center_x + CENTER_BIAS));
 
-    // vector<cv::Vec4i> hierarchy;
-    // vector<vector<cv::Point>> contours0;
-    // cv::findContours(gray, contours0, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
-    // cv::Mat contours = cv::Mat::zeros(gray.size(), CV_8UC1);
-    // for (size_t i = 0; i < contours0.size(); i++)
-    // {
-    //     for (size_t j = 0; j < contours0[i].size(); j++)
-    //     {
-    //         contours.at<uchar>(cv::Point(contours0[i][j].x, contours0[i][j].y)) = 255;
-    //     }
-    // }
-    // cv::namedWindow("contours", 1);
-    // cv::imshow("contours", contours);
+    /**
+     * @brief contour detect
+     */
+    vector<cv::Vec4i> hierarchy;
+    vector<vector<cv::Point>> contours0;
+    cv::findContours(gray, contours0, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+    cv::Mat contours = cv::Mat::zeros(gray.size(), CV_8UC1);
+    cv::drawContours(contours, contours0, -1, 80);
+
+    /**
+     * @brief find max/min distance
+     */
+    int dis_max = 0, dis_min = 90000;
+    {
+        int index = -1;
+        int tmp_dis;
+        for (size_t i = 0; i < contours0.size(); i++)
+        {
+            for (size_t j = 0; j < contours0[i].size(); j++)
+            {
+                tmp_dis=calc_distance(contours0[i][j].x,contours0[i][j].y,CENTER_BIAS,CENTER_BIAS);
+                dis_max=max(dis_max,tmp_dis);
+                dis_min=min(dis_min,tmp_dis);
+            }
+        }
+    }
+    // // test--
+    // cout<<sqrt(dis_max)<<endl<<sqrt(dis_min);
+    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_max),255);
+    // cv::circle(contours,cv::Point(CENTER_BIAS,CENTER_BIAS),sqrt(dis_min),255);
+    // // --test
+    cv::namedWindow("contours", 1);
+    cv::imshow("contours", contours);
 
     cv::namedWindow("origin", 0);
     cv::namedWindow("threshold", 0);
