@@ -20,7 +20,7 @@ int calc_distance(int x,int y,int center_x,int center_y)
 int main()
 {
     cv::Mat image, gray, image_2;
-    image = cv::imread(IMAGE_2);
+    image = cv::imread(IMAGE_3);
     if (image.empty())
     {
         cout << "aaa" << endl;
