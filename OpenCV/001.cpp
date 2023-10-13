@@ -1,3 +1,13 @@
+/**
+ * @file 001.cpp
+ * @author peox
+ * @brief 
+ * @version 0.1
+ * @date 2023-10-14
+ * 
+ * @note open from workspace
+ * 
+ */
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
